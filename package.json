@@ -1,0 +1,9 @@
+{
+  "name": "silentio",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "lodash": "^4.16.1",
+    "socket.io": "^1.4.8"
+  }
+}
