@@ -40,7 +40,7 @@ module.exports = (io, bindable) => {
         });
       });
 
-      socket.on(EVENT_DISCONNECT, (socket) => {
+      socket.on(EVENT_DISCONNECT, () => {
         _.isFunction(lifecycles_disconnect)
           ? lifecycles_disconnect(socket)
           : _.each(lifecycles_disconnect, (lifecycle) => lifecycle(socket));

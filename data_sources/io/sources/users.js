@@ -75,10 +75,28 @@ const lifecycles = {
   connect: (socket) => {
     const username = _.get(socket, 'handshake.query.username', null);
     if (null === username) {
-      socket.emit('connection.failed', 'Username is not provided');
+      socket.emit('connection.failed', {
+        message: 'Username is not provided'
+      });
       socket.disconnect();
       return;
     }
+
+    let in_use = false;
+    _.each(users, function(user) {
+      if (user.username.toLowerCase() === username.toLowerCase()) {
+        in_use = true;
+      }
+    });
+    
+    if (in_use) {
+      socket.emit('connection.failed', {
+        message: 'Username is already in use'
+      });
+      socket.disconnect();
+      return;
+    }
+
     users[socket.id] = {
       username: username,
       id: socket.id
