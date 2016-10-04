@@ -12,6 +12,14 @@ let users = {};
 const sources = {
   user_list : () => {
     return users;
+  },
+  user_name_list : () => {
+    let user_names = [];
+    _.each(users, (user) => {
+      user_names.push(user.username);
+    });
+    
+    return user_names;
   }
 };
 

@@ -12,6 +12,14 @@ let rooms = {};
 const sources = {
   room_list : () => {
     return rooms;
+  },
+  room_name_list : () => {
+    let room_names = [];
+    _.each(rooms, (room, room_name) => {
+      room_names.push(room_name);
+    });
+    
+    return room_names;
   }
 };
 
