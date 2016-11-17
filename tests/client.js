@@ -1,7 +1,7 @@
 'use strict';
 
 const io = require("socket.io-client");
-const socket = io.connect("http://127.0.0.1:3000", {query: "username=" + process.argv[2]});
+const socket = io.connect("http://192.168.1.3:8000", {query: "username=" + process.argv[2]});
 
 let stdin = process.openStdin();
 let current_destination = null;
