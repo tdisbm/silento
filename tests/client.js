@@ -1,7 +1,7 @@
 'use strict';
 
 const io = require("socket.io-client");
-const socket = io.connect("http://192.168.1.3:8000", {query: "username=" + process.argv[2]});
+const socket = io.connect("http://127.0.0.1:8000", {query: "username=" + process.argv[2] + "&type=user"});
 
 let stdin = process.openStdin();
 let current_destination = null;
@@ -32,6 +32,17 @@ stdin.addListener("data", function(input) {
       case pieces[0] == '@user':
         current_event = 'message_to_user';
         current_destination = pieces[1];
+        break;
+      case pieces[0] == '@on':
+        socket.on(pieces[1], (data) => {
+          console.log(data);
+        });
+        break;
+      case pieces[0] == '@off':
+        socket.off(pieces[1]);
+        break;
+      case pieces[0] == '@emit':
+        socket.emit(pieces[1]);
         break;
     }
   } else if (current_destination && current_event) {

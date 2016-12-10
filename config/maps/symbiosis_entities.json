@@ -1,0 +1,17 @@
+{
+  "nodes": [
+    {
+      "name" : "user",
+      "modules" : [
+        "src/symbiosis-entities/users.js",
+        "src/symbiosis-entities/rooms.js"
+      ],
+      "handshake" : {
+        "parameters" : [
+          {"name" : "type", "options" : ["required", "identifier"]},
+          {"name" : "username", "options": ["required"]}
+        ]
+      }
+    }
+  ]
+}
