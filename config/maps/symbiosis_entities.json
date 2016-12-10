@@ -8,7 +8,7 @@
       ],
       "handshake" : {
         "parameters" : [
-          {"name" : "type", "options" : ["required", "identifier"]},
+          {"name" : "role", "options" : ["required", "identifier"]},
           {"name" : "username", "options": ["required"]}
         ]
       }
