@@ -119,6 +119,8 @@ const lifecycles = {
         id: socket.id
       };
 
+      socket.emit('connection.success');
+
       const user_name_list = _.get(io, 'symbiosis_user.sources.user_name_list');
       io.emit('user_name_list', user_name_list(socket, {}));
     }
