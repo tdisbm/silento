@@ -1,7 +1,7 @@
 'use strict';
 
 const io = require("socket.io-client");
-const socket = io.connect("http://192.168.0.101:8000", {query: "username=" + process.argv[2] + "&role=user"});
+const socket = io.connect("http://178.168.58.17:8000", {query: "username=" + process.argv[2] + "&role=user"});
 
 let stdin = process.openStdin();
 let current_destination = null;
