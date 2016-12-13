@@ -13,6 +13,7 @@ const sources = {
   user_name_list : (socket, data) => {
     const users_length = _.size(users);
     const user_keys = Object.keys(users);
+    const username = _.get(socket, 'handshake.query.username', '');
     let from = _.get(data, "from", 0);
     let to = _.get(data, "to", users_length);
     let user_names = [];
@@ -26,6 +27,9 @@ const sources = {
     }
 
     for (let i = from; i < to; i++) {
+      if (users[user_keys[i]].username == username) {
+        continue;
+      }
       user_names.push(users[user_keys[i]].username);
     }
 
