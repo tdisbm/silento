@@ -70,7 +70,7 @@ const events = {
         if (user.username === to) {
           io.to(socket_id).emit('message_to_user', {
             message: message,
-            from: user_from.username
+            from: user_from
           })
         }
       })
