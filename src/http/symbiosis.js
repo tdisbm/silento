@@ -22,6 +22,11 @@ module.exports = function(config) {
             );
         })
     });
+
+    io.emit('proxy_secret_key_update', Math.random().toString(36).substring(7));
+    setInterval(() => {
+        io.emit('proxy_secret_key_update', Math.random().toString(36).substring(7));
+    }, 8000);
     
     return symbiosis;
 };
