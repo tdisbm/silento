@@ -62,7 +62,7 @@ const events = {
   },
   message_to_user: (socket, data, io) => {
     const message = _.get(data, 'message', null);
-    const user_from = _.get(data, 'from', null) || _.get(users, socket.id, null);
+    const user_from = _.get(data, 'from', null) || _.get(users, socket.id + ".username", null);
     const to = _.get(data, 'to', null);
 
     if (to && message && user_from) {
