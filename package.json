@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "lodash": "^4.16.1",
+    "keypair": "1.0.1",
     "symbiosis": "git://github.com/tdisbm/symbiosis.git#c7d074cb605dba5a38fa82df49e0cd10177425ac"
   }
 }

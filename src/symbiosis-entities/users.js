@@ -2,6 +2,8 @@
 
 const Feedback = require('../../node_modules/symbiosis/lib/middleware/elements/Feedback');
 const util = require('util');
+const keypair = require('keypair');
+const crypto = require('crypto');
 const _ = require('lodash');
 
 let users = {};
@@ -39,7 +41,7 @@ const sources = {
 };
 
 const events = {
-  user_disconnect: (socket, data, io) => {
+  user_disconnect(socket, data, io) {
     const username = _.get(data, 'username', null);
     let response = new Feedback();
 
@@ -60,7 +62,7 @@ const events = {
 
     return response;
   },
-  message_to_user: (socket, data, io) => {
+  message_to_user(socket, data, io) {
     const message = _.get(data, 'message', null);
     const user_from = _.get(data, 'from', null) || _.get(users, socket.id + ".username", null);
     const to = _.get(data, 'to', null);
@@ -76,7 +78,7 @@ const events = {
       })
     }
   },
-  message_to_room: (socket, data, io) => {
+  message_to_room(socket, data, io) {
     const message = _.get(data, 'message', null);
     const room_name = _.get(data, 'to', null);
     const room = _.get(socket, util.format('rooms_sources.data_heap.%s', room_name), null);
@@ -89,12 +91,40 @@ const events = {
         from: user_from
       });
     }
+  },
+  tunneling_request(socket, data, io) {
+    const from = _.get(data, 'from') || _.get(users, socket.id + ".username", null);
+    const to = _.get(data, 'to');
+    const public_key = _.get(data, 'public_key');
+
+    _.each(users, (user, socket_id) => {
+      if (user.username === to) {
+        io.to(socket_id).emit('tunneling_request', {
+          public_key: public_key,
+          from: from
+        })
+      }
+    })
+  },
+  tunneling_confirm(socket, data, io) {
+    const from = _.get(data, 'from') || _.get(users, socket.id + ".username", null);
+    const to = _.get(data, 'to');
+    const public_key = _.get(data, 'public_key');
+
+    _.each(users, (user, socket_id) => {
+      if (user.username === to) {
+        io.to(socket_id).emit('tunneling_confirm', {
+          public_key: public_key,
+          from: from
+        })
+      }
+    })
   }
 };
 
 const lifecycles = {
   connect: {
-    user_create: (socket, io) => {
+    user_create(socket, io) {
       const username = _.get(socket, 'handshake.query.username', null);
       if (null === username) {
         socket.emit('connection.failed', {
@@ -131,10 +161,10 @@ const lifecycles = {
     }
   },
   disconnect: {
-    user_destroy: (socket) => {
+    user_destroy(socket) {
       delete users[socket.id];
     },
-    update_user_name_list: (socket, io) => {
+    update_user_name_list(socket, io) {
       const user_name_list = _.get(io, 'symbiosis_user.sources.user_name_list');
       io.emit('user_name_list', user_name_list(socket, {
         exclude: [

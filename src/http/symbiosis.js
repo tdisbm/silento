@@ -1,32 +1,28 @@
-const symbiosis = require("symbiosis")("config/maps/symbiosis_entities.json");
+const symbiosis = require('symbiosis')('config/maps/symbiosis_entities.json');
+const keypair = require('keypair');
 const _ = require('lodash');
 
 module.exports = function(config) {
-    const port = _.get(config, 'io.port', null);
-    const io = symbiosis.io.listen(port);
+  const port = _.get(config, 'io.port', null);
+  const io = symbiosis.io.listen(port);
 
-    io.on('connect', function(socket) {
-        const headers = socket.handshake.headers;
-        
-        console.info('[+] NEW CONNECTION: \n - Host: %s \n - User Agent: %s \n - Username: %s',
-            headers['host'],
-            headers['user-agent'],
-            _.get(socket, 'handshake.query.username', null)
-        );
+  io.on('connect', function(socket) {
+    const headers = socket.handshake.headers;
 
-        socket.on("disconnect", function() {
-            console.info('[-] DISCONNECTED: \n - Host: %s \n - User Agent: %s \n - Username: %s',
-                headers['host'],
-                headers['user-agent'],
-                _.get(socket, 'handshake.query.username', null)
-            );
-        })
+    console.info('[+] NEW CONNECTION: \n - Host: %s \n - User Agent: %s \n - Username: %s',
+      headers['host'],
+      headers['user-agent'],
+      _.get(socket, 'handshake.query.username', null)
+    );
+
+    socket.on("disconnect", function() {
+      console.info('[-] DISCONNECTED: \n - Host: %s \n - User Agent: %s \n - Username: %s',
+        headers['host'],
+        headers['user-agent'],
+        _.get(socket, 'handshake.query.username', null)
+      );
     });
+  });
 
-    io.emit('proxy_secret_key_update', Math.random().toString(36).substring(7));
-    setInterval(() => {
-        io.emit('proxy_secret_key_update', Math.random().toString(36).substring(7));
-    }, 8000);
-    
-    return symbiosis;
+  return symbiosis;
 };
